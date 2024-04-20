@@ -1,0 +1,311 @@
+local SkidHub = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local FruitsHolder = Instance.new("ScrollingFrame")
+local Template = Instance.new("TextButton")
+local UIListLayout = Instance.new("UIListLayout")
+local TeleportToSpots = Instance.new("TextButton")
+local Information = Instance.new("TextButton")
+local UICorner = Instance.new("UICorner")
+local InfoIcon = Instance.new("ImageButton")
+
+SkidHub.Name = "SkidHub"
+SkidHub.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+SkidHub.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Frame.Parent = SkidHub
+Frame.BackgroundColor3 = Color3.fromRGB(26, 26, 26)
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.0694444925, 0, 0.424601763, 0)
+Frame.Size = UDim2.new(0, 124, 0, 168)
+
+FruitsHolder.Name = "FruitsHolder"
+FruitsHolder.Parent = Frame
+FruitsHolder.Active = true
+FruitsHolder.BackgroundColor3 = Color3.fromRGB(54, 54, 54)
+FruitsHolder.BorderColor3 = Color3.fromRGB(0, 0, 0)
+FruitsHolder.BorderSizePixel = 0
+FruitsHolder.Position = UDim2.new(0.114305802, 0, 0.0757575259, 0)
+FruitsHolder.Size = UDim2.new(0, 94, 0, 117)
+FruitsHolder.BottomImage = ""
+FruitsHolder.MidImage = ""
+FruitsHolder.ScrollBarThickness = 0
+FruitsHolder.TopImage = ""
+
+Template.Name = "Template"
+Template.Parent = FruitsHolder
+Template.BackgroundColor3 = Color3.fromRGB(39, 39, 39)
+Template.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Template.BorderSizePixel = 0
+Template.Position = UDim2.new(8.08787277e-08, 0, 2.59846928e-07, 0)
+Template.Size = UDim2.new(1, 0, 0.0599999987, 0)
+Template.Font = Enum.Font.Unknown
+Template.Text = "Paw Fruit"
+Template.TextColor3 = Color3.fromRGB(255, 255, 255)
+Template.TextSize = 8
+Template.TextStrokeTransparency = 0.200
+Template.TextWrapped = true
+
+UIListLayout.Parent = FruitsHolder
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+TeleportToSpots.Name = "TeleportToSpots"
+TeleportToSpots.Parent = Frame
+TeleportToSpots.BackgroundColor3 = Color3.fromRGB(39, 39, 39)
+TeleportToSpots.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TeleportToSpots.BorderSizePixel = 0
+TeleportToSpots.Position = UDim2.new(0.156521708, 0, 0.827922106, 0)
+TeleportToSpots.Size = UDim2.new(0, 84, 0, 16)
+TeleportToSpots.AutoButtonColor = false
+TeleportToSpots.Font = Enum.Font.Unknown
+TeleportToSpots.Text = "Collect All"
+TeleportToSpots.TextColor3 = Color3.fromRGB(255, 255, 255)
+TeleportToSpots.TextSize = 8
+TeleportToSpots.TextWrapped = true
+
+Information.Name = "Information"
+Information.Parent = Frame
+Information.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+Information.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Information.BorderSizePixel = 0
+Information.Position = UDim2.new(1.10434783, 0, 0, 0)
+Information.Size = UDim2.new(0, 84, 0, 55)
+Information.Visible = false
+Information.AutoButtonColor = false
+Information.Font = Enum.Font.Unknown
+Information.Text = "Red - Fruit is unrendered and cannot be teleported to / Green - Fruit is rendered and can be teleported to / Withe - Is Unknown"
+Information.TextColor3 = Color3.fromRGB(255, 255, 255)
+Information.TextScaled = true
+Information.TextSize = 14.000
+Information.TextWrapped = true
+
+UICorner.Parent = Information
+
+InfoIcon.Name = "InfoIcon"
+InfoIcon.Parent = Frame
+InfoIcon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+InfoIcon.BackgroundTransparency = 1.000
+InfoIcon.BorderColor3 = Color3.fromRGB(0, 0, 0)
+InfoIcon.BorderSizePixel = 0
+InfoIcon.Position = UDim2.new(0.869565189, 0, 0.835497916, 0)
+InfoIcon.Size = UDim2.new(0, 12, 0, 12)
+InfoIcon.Image = "rbxassetid://9405926389"
+
+--Scripts
+print("UI LOADED")
+
+local function Notify(NotiText) --Send Notifications
+	game:GetService("StarterGui"):SetCore("SendNotification",{
+		Title = "Skid Hub",
+		Text = NotiText,
+		Icon = "rbxassetid://9949643585"
+	})
+end
+
+print("Nortification Script Loaded.")
+
+spawn(function() --Dragify
+	local UserInputService = game:GetService("UserInputService")
+
+	local dragToggle
+	local dragInput
+	local dragSpeed
+	local dragStart
+	local dragPos
+	local startPos
+
+	function dragify(fram)
+		dragToggle = nil
+		dragSpeed = 0.50
+		dragInput = nil
+		dragStart = nil
+		dragPos = nil
+		local function updateInput(input)
+			local Delta = input.Position - dragStart
+			local Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
+			game:GetService("TweenService"):Create(Frame, TweenInfo.new(0.30), {Position = Position}):Play()
+		end
+		Frame.InputBegan:Connect(function(input)
+			if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and UserInputService:GetFocusedTextBox() == nil then
+				dragToggle = true
+				dragStart = input.Position
+				startPos = Frame.Position
+				input.Changed:Connect(function()
+					if input.UserInputState == Enum.UserInputState.End then
+						dragToggle = false
+					end
+				end)
+			end
+		end)
+		Frame.InputChanged:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+				dragInput = input
+			end
+		end)
+		game:GetService("UserInputService").InputChanged:Connect(function(input)
+			if input == dragInput and dragToggle then
+				updateInput(input)
+			end
+		end)
+	end
+
+	dragify(Frame)
+end)
+
+
+spawn(function() -- Info Button
+	local function Toogle()
+		if Information.Visible == false then
+			Information.Visible = true
+		else
+			Information.Visible = false
+		end
+	end
+
+	InfoIcon.MouseButton1Click:Connect(Toogle)
+end)
+
+spawn(function() --Fruit Detections
+	local Fruits = workspace.OtherInteractables
+	local Spawns = workspace.Fruit_Spawns
+
+	local Realtemplate = Template:Clone()
+	Template:Destroy()
+
+	local function createbutton(Fruit)
+
+		local NewButton = Realtemplate:Clone()
+		NewButton.Name = tostring(Fruit.Name)
+		NewButton.Text = tostring(Fruit.Name)
+		NewButton.Parent = FruitsHolder
+
+		--appearance control
+		spawn(function()
+			spawn(function()
+				while Fruit ~= nil do
+					if #Fruit:GetChildren() > 0 then
+						NewButton.TextColor3 = Color3.fromRGB(0, 255, 0)
+					else
+						NewButton.TextColor3 = Color3.fromRGB(255, 0, 0)
+					end
+					wait(.25)
+				end
+			end)
+			Fruit.Destroying:Connect(function()
+				NewButton:Destroy()
+			end)
+		end)
+
+		NewButton.MouseButton1Click:Connect(function()
+			if #Fruit:GetChildren() < 1 then
+				return
+			end
+
+			local player = game.Players.LocalPlayer
+			local char = player.Character
+			local root = char.HumanoidRootPart
+
+			local positionbefore = root.CFrame
+			local timeout = false
+
+			spawn(function()
+				wait(1)
+				timeout = true
+			end)
+
+			local primary = Fruit:FindFirstChild("Primary")
+			repeat
+				if timeout then
+					root.CFrame = positionbefore
+					break
+				end
+				if primary then
+					root.CFrame = primary.CFrame
+				end
+				wait()
+			until Fruit == nil
+
+			root.CFrame = positionbefore
+
+		end)
+
+
+	end
+
+	local function collectall()
+		local player = game.Players.LocalPlayer
+		local char = player.Character
+		local root = char.HumanoidRootPart
+		
+		local camera = workspace.CurrentCamera
+
+		local lastposition = root.CFrame
+
+		if #Fruits:GetChildren() < 1 then
+			Notify("No Fruits are available right now.") 
+			return
+		else
+			Notify(tostring("Looking for unrendered Fruits."))
+		end
+		
+		--lock camera to avoid lag
+		camera.CameraType = Enum.CameraType.Scriptable
+		
+		for index,cords in pairs(Spawns:GetChildren()) do
+			if #Fruits:GetChildren() < 1 then
+				Notify("Everything was picked up.") 
+				break
+			end
+			
+			root.CFrame = cords.CFrame
+
+			wait(0.2)
+
+			local availablefruits = {}
+			for _,fruit in pairs(Fruits:GetChildren()) do
+				if #fruit:GetChildren() > 0 then
+					table.insert(availablefruits,fruit)
+				end
+			end
+
+			for _,fruit in pairs(availablefruits) do
+				local positionbefore = root.CFrame
+				local timeout = false
+
+				spawn(function()
+					wait()
+					timeout = true
+				end)
+
+				local primary = fruit:FindFirstChild("Primary")
+				repeat
+					if timeout then
+						break
+					end
+					if primary then
+						root.CFrame = primary.CFrame
+					end
+					wait()
+				until fruit == nil
+			end
+		end
+		
+		camera.CameraType = Enum.CameraType.Custom
+		root.CFrame = lastposition
+	end
+
+	TeleportToSpots.MouseButton1Click:Connect(collectall)
+
+	spawn(function()
+		--First Scan
+		for index,fruit in pairs(Fruits:GetChildren()) do
+			createbutton(fruit)
+		end
+		Fruits.ChildAdded:Connect(function(Child)
+			Notify("A new Fruit has spawned: "..Child.Name)
+			createbutton(Child)
+		end)
+	end)
+end)
+
+Notify("Skid Hub was executed.") 
