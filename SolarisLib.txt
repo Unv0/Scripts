@@ -1,11 +1,10 @@
 loadstring(game:HttpGet('https://raw.githubusercontent.com/1uaxx/yunv2/main/librarysource.lua'))()
 
 local Library = initLibrary()
-local Window = Library:Load({name = "Skid Hub", sizeX = 325, sizeY = 412, color = Color3.fromRGB(255, 255, 255)})
+local Window = Library:Load({name = "Skid Hub", sizeX = 255, sizeY = 382, color = Color3.fromRGB(255, 255, 255)})
 
 local Tab = Window:Tab("Legacy Piece")
-local Tab2 = Window:Tab("Visuals")
-
+local Tab2 = Window:Tab("Settings")
 local Aimingsec1 = Tab:Section{name = "Aim Assist", column = 1}
 local Aimingsec2 = Tab:Section{name = "Silent Aimbot", column = 2}
 local Visualssec1 = Tab2:Section{name = "Wallhacks", column = 1}
